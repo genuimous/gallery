@@ -1,0 +1,55 @@
+body
+{
+  color: #eeeeee;
+  background-color: #000000;
+}
+
+a:link 
+{
+  color: #58acff;
+}
+
+a:visited 
+{
+  color: #58acff;
+}
+a:active 
+{
+  color: #58acff;
+} 
+
+a:hover
+{
+  color: #ff0000;
+} 
+
+h1
+{
+  color: #dfc341;
+  font-family: Verdana, sans-serif;
+  font-size: 20pt;
+  font-style: normal;
+  font-weight: normal;
+  text-align: center;
+}
+
+h2
+{
+  font-family: Verdana, sans-serif;
+  font-size: 14pt;
+  font-style: normal;
+  font-weight: normal;
+  text-align: center;
+}
+
+img
+{
+  border: 1px solid #cccccc;
+  padding: 2px;
+}
+
+table
+{
+  font-family: Tahoma, Arial, Helvetica, sans-serif;
+  font-size: 10pt; font-weight: normal;
+}
