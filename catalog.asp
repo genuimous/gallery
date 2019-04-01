@@ -1,7 +1,6 @@
 <%@ Language="VBScript" %>
 <!-- #include file="utils.inc" -->
 <!-- #include file="imaging.inc" -->
-<!-- #include file="security.inc" -->
 <%
 ' Looking at URL params
 Catalog = Request.QueryString("name")
@@ -33,10 +32,10 @@ if Len(Catalog) > 0 then
     ' Start of page
     Response.Write "<html>"
     Response.Write "<head>"
-    Response.Write "<meta http-equiv=" & Quote & "Content-Type" & Quote & " content=" & Quote & "text/html; charset=" & LanguageCharset & Quote & ">"
+    Response.Write "<meta http-equiv=" & Quote & "Content-Type" & Quote & " content=" & Quote & "text/html; charset=" & LanguageCharset & Quote & "/>"
 
     if Len(CatalogStyle) > 0 then
-      Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & WebDirDelimiter & "catalog.css" & Quote & ">"
+      Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & WebDirDelimiter & "catalog.css" & Quote & "/>"
     end if
 
     Response.Write "<title>" & CatalogTitle & "</title>"
@@ -45,29 +44,17 @@ if Len(Catalog) > 0 then
     Response.Write "<center>"
     Response.Write "<div id=" & Quote & "title" & Quote & "><h1>" & CatalogTitle & "</h1></div>"
     Response.Write "<div id=" & Quote & "content" & Quote & ">"
-    Response.Write "<p>" & CatalogIntroText& "</p>"
+    Response.Write CatalogIntroText
     Response.Write "<hr>"
+
+    ' Looking for albums
+    set FolderList = FileSystem.GetFolder(CatalogPath).SubFolders
+
     Response.Write "<table align=" & Quote & "center" & Quote & ">"
     Response.Write "<tbody>"
 
-    ' Looking for albums
-    dim Albums()
-    AlbumCount = 0
-    for each Folder in FileSystem.GetFolder(CatalogPath).SubFolders
-      AlbumCount = AlbumCount + 1
-      redim preserve Albums(AlbumCount - 1)
-      Albums(AlbumCount - 1) = Folder.Name
-    next
-
-    if AlbumCount > 1 then
-      for AlbumCounter = 0 to (AlbumCount - 1) \ 2
-        Album = Albums(AlbumCounter)
-        Albums(AlbumCounter) = Albums(AlbumCount - AlbumCounter - 1)
-        Albums(AlbumCount - AlbumCounter - 1) = Album
-      next
-    end if
-
-    for each Album in Albums
+    for each Folder in FolderList
+      Album = Folder.Name
       AlbumPath = Server.MapPath(CatalogDir & WebDirDelimiter & Catalog & WebDirDelimiter & Album)
       AlbumConfig = GetFileContent(AlbumPath & OSDirDelimiter & AlbumConfigFileName) & vbCrLf
       DefaultAlbumConfig = GetFileContent(RootPath & OSDirDelimiter & AlbumConfigFileName) & vbCrLf
@@ -82,7 +69,9 @@ if Len(Catalog) > 0 then
         ' Looking for suitable image
         ImageFileName = ""
 
-        for each File in FileSystem.GetFolder(AlbumPath).Files
+        set FileList = FileSystem.GetFolder(AlbumPath).Files
+
+        for each File in FileList
           Extension = "." & Lcase(FileSystem.GetExtensionName(File.Name))
 
           if ContainsValue(ImageExtensions, Extension) and Left(Right(Lcase(File.Name), Len(ThumbnailPostfix) + Len(Extension)), Len(ThumbnailPostfix)) <> ThumbnailPostfix then
@@ -91,9 +80,10 @@ if Len(Catalog) > 0 then
           end if
         next
 
+        set FileList = Nothing
+
         if Len(ImageFileName) > 0 then
           GenerateImagePreview AlbumPath & OSDirDelimiter & ImageFileName, AlbumPath & OSDirDelimiter & AlbumLogoFileName, CatalogLogoSize, True
-          CopyNTFSSecuritySettings AlbumPath & OSDirDelimiter & ImageFileName, AlbumPath & OSDirDelimiter & AlbumLogoFileName
         end if
       end if
 
@@ -103,10 +93,12 @@ if Len(Catalog) > 0 then
       Response.Write "</tr>"
     next
 
+    set FolderList = Nothing
+
     Response.Write "</tbody>"
     Response.Write "</table>"
     Response.Write "<hr>"
-    Response.Write "<p>" & CatalogOutroText & "</p>"
+    Response.Write CatalogOutroText
     Response.Write "</div>"
 
     ' Copyright

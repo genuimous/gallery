@@ -37,10 +37,10 @@ if Len(Catalog) > 0 and Len(Album) > 0 and Len(ImageFileName) > 0 then
     ' Start of page
     Response.Write "<html>"
     Response.Write "<head>"
-    Response.Write "<meta http-equiv=" & Quote & "Content-Type" & Quote & " content=" & Quote & "text/html; charset=" & LanguageCharset & Quote & ">"
+    Response.Write "<meta http-equiv=" & Quote & "Content-Type" & Quote & " content=" & Quote & "text/html; charset=" & LanguageCharset & Quote & "/>"
 
     if Len(CatalogStyle) > 0 then
-      Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & WebDirDelimiter & "image.css" & Quote & ">"
+      Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & WebDirDelimiter & "image.css" & Quote & "/>"
     end if
 
     Response.Write "<title>" & ImageFileName & "</title>"
@@ -54,16 +54,18 @@ if Len(Catalog) > 0 and Len(Album) > 0 and Len(ImageFileName) > 0 then
     Response.Write "<tbody>"
 
     ' Looking for images
+    set FileList = FileSystem.GetFolder(AlbumPath).Files
+
     ImageCounter = 0
     ImageFileNum = 0
     PreviousImageFileName = ""
     NextImageFileName = ""
     TotalImageCount = 0
 
-    for each File in FileSystem.GetFolder(AlbumPath).Files
-      Extension = "." & FileSystem.GetExtensionName(File.Name)
+    for each File in FileList
+      Extension = "." & Lcase(FileSystem.GetExtensionName(File.Name))
 
-      if ContainsValue(ImageExtensions, Lcase(Extension)) and File.Name <> AlbumLogoFileName and Left(Right(Lcase(File.Name), Len(ThumbnailPostfix) + Len(Extension)), Len(ThumbnailPostfix)) <> ThumbnailPostfix then
+      if ContainsValue(ImageExtensions, Extension) and File.Name <> AlbumLogoFileName and Left(Right(Lcase(File.Name), Len(ThumbnailPostfix) + Len(Extension)), Len(ThumbnailPostfix)) <> ThumbnailPostfix then
         ImageCounter = ImageCounter + 1
         TotalImageCount = TotalImageCount + 1
 
@@ -81,10 +83,12 @@ if Len(Catalog) > 0 and Len(Album) > 0 and Len(ImageFileName) > 0 then
       end if
     next
 
+    set FileList = Nothing
+
     ' Image
     Response.Write "<tr><td align=" & Quote & "left" & Quote & ">" & ImageFileName & "</td><td></td><td align=" & Quote & "right" & Quote & ">" & ImageFileNum & "/" & TotalImageCount & "</td></tr>"
     Response.Write "<tr><td colspan=" & Quote & "3" & Quote & "><br></td></tr>"
-    Response.Write "<tr><td colspan=" & Quote & "3" & Quote & "><img src=" & Quote & CatalogDir & WebDirDelimiter & Catalog & WebDirDelimiter & Album & WebDirDelimiter & ImageFileName & Quote & " alt=" & Quote & ImageFileName & Quote & "></td></tr>"
+    Response.Write "<tr><td colspan=" & Quote & "3" & Quote & "><img src=" & Quote & CatalogDir & WebDirDelimiter & Catalog & WebDirDelimiter & Album & WebDirDelimiter & ImageFileName & Quote & " alt=" & ImageFileName & "/></td></tr>"
     Response.Write "<tr><td colspan=" & Quote & "3" & Quote & "><br></td></tr>"
 
     ' Navigator

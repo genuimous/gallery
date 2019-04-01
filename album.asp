@@ -1,7 +1,6 @@
 <%@ Language="VBScript" %>
 <!-- #include file="utils.inc" -->
 <!-- #include file="imaging.inc" -->
-<!-- #include file="security.inc" -->
 <%
 ' Looking at URL params
 Catalog = Request.QueryString("catalog")
@@ -48,10 +47,10 @@ if Len(Catalog) > 0 and Len(Album) > 0 and PageNum >= 1 then
     ' Start of page
     Response.Write "<html>"
     Response.Write "<head>"
-    Response.Write "<meta http-equiv=" & Quote & "Content-Type" & Quote & " content=" & Quote & "text/html; charset=" & LanguageCharset & Quote & ">"
+    Response.Write "<meta http-equiv=" & Quote & "Content-Type" & Quote & " content=" & Quote & "text/html; charset=" & LanguageCharset & Quote & "/>"
 
     if Len(CatalogStyle) > 0 then
-      Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & WebDirDelimiter & "album.css" & Quote & ">"
+      Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & WebDirDelimiter & "album.css" & Quote & "/>"
     end if
 
     Response.Write "<title>" & AlbumTitle & "</title>"
@@ -74,36 +73,39 @@ if Len(Catalog) > 0 and Len(Album) > 0 and PageNum >= 1 then
     Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><hr></td></tr>"
 
     ' Looking for images
+    set FileList = FileSystem.GetFolder(AlbumPath).Files
+
     FirstImageNum = (PageNum - 1) * AlbumThumbnailGridCols * AlbumThumbnailGridRows + 1
     LastImageNum = PageNum * AlbumThumbnailGridCols * AlbumThumbnailGridRows
     ImageCounter = 0
     OnPageImageCount = 0
 
-    for each File in FileSystem.GetFolder(AlbumPath).Files
-      Extension = "." & FileSystem.GetExtensionName(File.Name)
+    for each File in FileList
+      Extension = "." & Lcase(FileSystem.GetExtensionName(File.Name))
 
-      if ContainsValue(ImageExtensions, Lcase(Extension)) and File.Name <> AlbumLogoFileName and Left(Right(Lcase(File.Name), Len(ThumbnailPostfix) + Len(Extension)), Len(ThumbnailPostfix)) <> ThumbnailPostfix then
+      if ContainsValue(ImageExtensions, Extension) and File.Name <> AlbumLogoFileName and Left(Right(Lcase(File.Name), Len(ThumbnailPostfix) + Len(Extension)), Len(ThumbnailPostfix)) <> ThumbnailPostfix then
         ImageCounter = ImageCounter + 1
         ImageFileName = File.Name
-        ThumbnailFileName = Left(ImageFileName, Len(ImageFileName) - Len(Extension)) & ThumbnailPostfix & Extension
+        ThumbnailFileName = Left(File.Name, Len(File.Name) - Len(Extension)) & ThumbnailPostfix & Extension
 
         if ImageCounter >= FirstImageNum and ImageCounter <= LastImageNum then
           ' Checking thumbnail
           if not FileSystem.FileExists(AlbumPath & OSDirDelimiter & ThumbnailFileName) then
             GenerateImagePreview AlbumPath & OSDirDelimiter & ImageFileName, AlbumPath & OSDirDelimiter & ThumbnailFileName, AlbumThumbnailSize, False
-            CopyNTFSSecuritySettings AlbumPath & OSDirDelimiter & ImageFileName, AlbumPath & OSDirDelimiter & ThumbnailFileName
           end if
 
           if (ImageCounter - 1) mod AlbumThumbnailGridCols = 0 then Response.Write "<tr valign=" & Quote & "center" & Quote & ">"
 
           ImageLink = "image.asp?catalog=" & Catalog & "&album=" & Album & "&name=" & ImageFileName
-          Response.Write "<td align=" & Quote & "center" & Quote & " width=" & Quote & AlbumCellSize & Quote & " height=" & Quote & AlbumCellSize & Quote & "><a href=" & Quote & ImageLink & Quote & " title=" & Quote & ImageFileName & Quote & "><img src=" & Quote & CatalogDir & WebDirDelimiter & Catalog & WebDirDelimiter & Album & WebDirDelimiter & ThumbnailFileName & Quote & " alt=" & Quote & ImageFileName & Quote & "></a></td>"
+          Response.Write "<td align=" & Quote & "center" & Quote & " width=" & Quote & AlbumCellSize & Quote & " height=" & Quote & AlbumCellSize & Quote & "><a href=" & Quote & ImageLink & Quote & " title=" & Quote & ImageFileName & Quote & "><img src=" & Quote & CatalogDir & WebDirDelimiter & Catalog & WebDirDelimiter & Album & WebDirDelimiter & ThumbnailFileName & Quote & " alt=" & Quote & ImageFileName & Quote & "/></a></td>"
           OnPageImageCount = OnPageImageCount + 1
 
           if ImageCounter mod AlbumThumbnailGridCols = 0 then Response.Write "</tr>"
         end if
       end if
     next
+
+    set FileList = Nothing
 
     TotalImageCount = ImageCounter
 
