@@ -28,10 +28,10 @@ Now, enter in web browser:
 Gallery web page with list of your albums should appear. You can create as many dirs as you want (i.e. "my_photos", "your_photos", "theyr_photos" etc.) and query them using name parameter in the URL.
   
 Also, there are catalog.cfg and album.cfg files for custom data:
-- catalog.cfg file in <gallery_app_dir> provides default labels for new catalogs, but you can copy in to your catalog subdir and redefine there (catalog.cfg found in "<gallery_app_dir>/catalog/<subdir>" has more priority then found in "<gallery_app_dir>")
-- album.cfg file in <gallery_app_dir> provides default labels for new albums, but you can copy in to your album subdir and redefine there (album.cfg found in "<gallery_app_dir>/catalog/<subdir>/<album_subdir>" has more priority then found in "<gallery_app_dir>")
+- catalog.cfg file in <gallery_app_dir> provides default labels for new catalogs, but you can copy in to your catalog subdir and redefine there (catalog.cfg found in "<gallery_app_dir>\catalog\subdir" has more priority then found in "<gallery_app_dir>")
+- album.cfg file in <gallery_app_dir> provides default labels for new albums, but you can copy in to your album subdir and redefine there (album.cfg found in "<gallery_app_dir>\catalog\subdir\album_subdir" has more priority then found in "<gallery_app_dir>")
  
-Additionally, you can use intro.txt and outro.txt files in "<gallery_app_dir>/catalog/<subdir>" to provide info text about your catalog.
+Additionally, you can use intro.txt and outro.txt files in "<gallery_app_dir>\catalog\subdir" to provide info text about your catalog.
   
 For example, complete structure will be like that:
  - <gallery_app_dir>\catalog\my_photos\album_1 - album 1 in my_photos
