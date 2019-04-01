@@ -12,6 +12,7 @@ To install, just copy this files to web directory on your server:
 - image.cfg
 - imaging.inc
 - utils.inc
+
 Don't forget give ASP execition for this dir!
 
 After that, create (virtual) subdir with name "catalog" - pictures will be stored here. Now, it possible to create dir "my_photos" in web directory "<gallery_app_dir>\catalog" (full path will be just like that: "<gallery_app_dir>\catalog\my_photos") and place here subdirs with ypor photos. Only JPEG (.jpg, .jpeg) pictures supported. For example:
