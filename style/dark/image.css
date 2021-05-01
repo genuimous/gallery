@@ -1,36 +1,36 @@
 body
 {
-  color: #eeeeee;
-  background-color: #000000;
+	color: #eeeeee;
+	background-color: #000000;
 }
 
 a:link 
 {
-  color: #58acff;
+	color: #58acff;
 }
 
 a:visited 
 {
-  color: #58acff;
+	color: #58acff;
 }
 a:active 
 {
-  color: #58acff;
+	color: #58acff;
 } 
 
 a:hover
 {
-  color: #ff0000;
+	color: #ff0000;
 } 
 
 img
 {
-  border: 1px solid #cccccc;
-  padding: 2px;
+	border: 1px solid #cccccc;
+	padding: 2px;
 }
 
 table
 {
-  font-family: Tahoma, Arial, Helvetica, sans-serif;
-  font-size: 10pt; font-weight: normal;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 10pt; font-weight: normal;
 }
