@@ -1,7 +1,5 @@
 <%@ Language="VBScript" %>
 <!-- #include file="common.inc" -->
-<!-- #include file="utils.inc" -->
-<!-- #include file="math.inc" -->
 <!-- #include file="imaging.inc" -->
 <%
 ' Looking at URL params
@@ -109,7 +107,8 @@ if Len(Catalog) > 0 and Len(Album) > 0 and Len(ImageFileName) > 0 then
 
 		' Navigator
 		if ImageNavigation then
-			PageNum = RoundUp(ImageFileNum / (AlbumThumbnailGridCols * AlbumThumbnailGridRows))
+			PageNum = -Int(-ImageFileNum / (AlbumThumbnailGridCols * AlbumThumbnailGridRows))
+
 			if Len(PreviousImageFileName) > 0 then
 				PreviousImageLink = "image.asp?catalog=" & Catalog & "&album=" & Album & "&name=" & PreviousImageFileName
 			else

@@ -1,12 +1,11 @@
 <%@ Language="VBScript" %>
 <!-- #include file="common.inc" -->
-<!-- #include file="utils.inc" -->
-<!-- #include file="math.inc" -->
 <!-- #include file="imaging.inc" -->
 <%
 ' Looking at URL params
 Catalog = Request.QueryString("catalog")
 Album = Request.QueryString("name")
+
 if Len(Request.QueryString("page")) > 0 then
 	if IsNumeric(Request.QueryString("page")) then
 		PageNum = CLng(Request.QueryString("page"))
@@ -128,7 +127,7 @@ if Len(Catalog) > 0 and Len(Album) > 0 and PageNum >= 1 then
 		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><hr></td></tr>"
 		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><br></td></tr>"
 
-		TotalPageCount = RoundUp(TotalImageCount / (AlbumThumbnailGridCols * AlbumThumbnailGridRows))
+		TotalPageCount = -Int(-TotalImageCount / (AlbumThumbnailGridCols * AlbumThumbnailGridRows))
 
 		if TotalPageCount > 1 then
 			Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & ">"

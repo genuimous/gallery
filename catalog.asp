@@ -1,6 +1,5 @@
 <%@ Language="VBScript" %>
 <!-- #include file="common.inc" -->
-<!-- #include file="utils.inc" -->
 <!-- #include file="imaging.inc" -->
 <%
 ' Looking at URL params
