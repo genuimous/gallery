@@ -2,7 +2,7 @@
 <!-- #include file="common.inc" -->
 <!-- #include file="imaging.inc" -->
 <%
-' Looking at URL params
+' Looking for URL params
 Catalog = Request.QueryString("catalog")
 Album = Request.QueryString("name")
 
@@ -69,9 +69,9 @@ if Len(Catalog) > 0 and Len(Album) > 0 and PageNum >= 1 then
 		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><br></td></tr>"
 		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & "><a href=" & Quote & "catalog.asp?name=" & Catalog & Quote & " title=" & Quote & LanguageMainPageTitle & Quote & ">" & LanguageMainPage & "</a></td></tr>"
 		if Len(AlbumArchiveFileName) > 0 then
-				if FileSystem.FileExists(AlbumPath & OSDirDelimiter & AlbumArchiveFileName) then
-						Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & "><a download href=" & Quote & CatalogDir & WebDirDelimiter & Catalog & WebDirDelimiter & Album & WebDirDelimiter & AlbumArchiveFileName & Quote & " title=" & Quote & LanguageDownloadAllTitle & Quote & ">" & LanguageDownloadAll & "</a></td></tr>"
-				end if
+			if FileSystem.FileExists(AlbumPath & OSDirDelimiter & AlbumArchiveFileName) then
+				Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & "><a download href=" & Quote & CatalogDir & WebDirDelimiter & Catalog & WebDirDelimiter & Album & WebDirDelimiter & AlbumArchiveFileName & Quote & " title=" & Quote & LanguageDownloadAllTitle & Quote & ">" & LanguageDownloadAll & "</a></td></tr>"
+			end if
 		end if
 		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><br></td></tr>"
 		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & ">" & LanguageThumbnailHint & "</td></tr>"
