@@ -51,7 +51,7 @@ if Len(Catalog) > 0 and Len(Album) > 0 and PageNum >= 1 then
 		Response.Write "<head>"
 		Response.Write "<meta http-equiv=" & Quote & "Content-Type" & Quote & " content=" & Quote & "text/html; charset=" & LanguageCharset & Quote & "/>"
 		if Len(CatalogStyle) > 0 then
-			Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & WebDirDelimiter & "album.css" & Quote & "/>"
+			Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & ".css" & Quote & "/>"
 		end if
 		Response.Write "<link rel=" & Quote & "icon" & Quote & " type=" & Quote & "image/png" & Quote & " href=" & Quote & "favicon.png" & Quote & "/>"
 		Response.Write "<title>" & AlbumTitle & "</title>"
@@ -63,20 +63,30 @@ if Len(Catalog) > 0 and Len(Album) > 0 and PageNum >= 1 then
 		Response.Write "<td align=" & Quote & "center" & Quote & ">"
 		Response.Write "<table align=" & Quote & "center" & Quote & " width=" & Quote & AlbumThumbnailGridCols * AlbumCellSize & Quote & ">"
 		Response.Write "<tbody>"
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><br></td></tr>"
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & "><h1>" & AlbumTitle & "</h1></td></tr>"
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & "><h2>" & AlbumDescription & "</h2></td></tr>"
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><br></td></tr>"
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & "><a href=" & Quote & "catalog.asp?name=" & Catalog & Quote & " title=" & Quote & LanguageMainPageTitle & Quote & ">" & LanguageMainPage & "</a></td></tr>"
+		Response.Write "<tr><td><br></td></tr>"
+
+		' Header
+		Response.Write "<tr><td align=" & Quote & "center" & Quote & "><h1>" & AlbumTitle & "</h1></td></tr>"
+		Response.Write "<tr><td><br></td></tr>"
+
+		' Links
+		Response.Write "<tr><td align=" & Quote & "center" & Quote & "><a href=" & Quote & "catalog.asp?name=" & Catalog & Quote & " title=" & Quote & LanguageMainPageTitle & Quote & ">" & LanguageMainPage & "</a></td></tr>"
 		if Len(AlbumArchiveFileName) > 0 then
 			if FileSystem.FileExists(AlbumPath & OSDirDelimiter & AlbumArchiveFileName) then
-				Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & "><a download href=" & Quote & CatalogDir & WebDirDelimiter & Catalog & WebDirDelimiter & Album & WebDirDelimiter & AlbumArchiveFileName & Quote & " title=" & Quote & LanguageDownloadAllTitle & Quote & ">" & LanguageDownloadAll & "</a></td></tr>"
+				Response.Write "<tr><td align=" & Quote & "center" & Quote & "><a download href=" & Quote & CatalogDir & WebDirDelimiter & Catalog & WebDirDelimiter & Album & WebDirDelimiter & AlbumArchiveFileName & Quote & " title=" & Quote & LanguageDownloadAllTitle & Quote & ">" & LanguageDownloadAll & "</a></td></tr>"
 			end if
 		end if
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><br></td></tr>"
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & ">" & LanguageThumbnailHint & "</td></tr>"
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><br></td></tr>"
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><hr></td></tr>"
+		Response.Write "<tr><td><br></td></tr>"
+
+		' Info
+		Response.Write "<tr><td align=" & Quote & "center" & Quote & ">" & LanguageThumbnailHint & "</td></tr>"
+		Response.Write "<tr><td><br></td></tr>"
+
+		' Images
+		Response.Write "<tr><td><hr></td></tr>"
+		Response.Write "<tr><td>"
+		Response.Write "<table align=" & Quote & "center" & Quote & ">"
+		Response.Write "<tbody>"
 
 		' Looking for images
 		set FileList = FileSystem.GetFolder(AlbumPath).Files
@@ -122,15 +132,18 @@ if Len(Catalog) > 0 and Len(Album) > 0 and PageNum >= 1 then
 
 			Response.Write "</tr>"
 		end if
+		
+		Response.Write "</tbody>"
+		Response.Write "</table>"
+		Response.Write "</tr></td>"
+		Response.Write "<tr><td><hr></td></tr>"
+		Response.Write "<tr><td><br></td></tr>"
 
 		' Page list
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><hr></td></tr>"
-		Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & "><br></td></tr>"
-
 		TotalPageCount = -Int(-TotalImageCount / (AlbumThumbnailGridCols * AlbumThumbnailGridRows))
 
 		if TotalPageCount > 1 then
-			Response.Write "<tr><td colspan=" & Quote & AlbumThumbnailGridCols & Quote & " align=" & Quote & "center" & Quote & ">"
+			Response.Write "<tr><td align=" & Quote & "center" & Quote & ">"
 
 			for PageCounter = 1 to TotalPageCount
 				if PageCounter > 1 then Response.Write " "
@@ -143,6 +156,7 @@ if Len(Catalog) > 0 and Len(Album) > 0 and PageNum >= 1 then
 			next
 
 			Response.Write "</td></tr>"
+			Response.Write "<tr><td><br></td></tr>"
 		end if
 
 		' End of page
