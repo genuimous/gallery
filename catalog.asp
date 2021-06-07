@@ -2,7 +2,7 @@
 <!-- #include file="common.inc" -->
 <!-- #include file="imaging.inc" -->
 <%
-' Looking at URL params
+' Looking for URL params
 Catalog = Request.QueryString("name")
 
 if Len(Catalog) > 0 then
@@ -15,7 +15,7 @@ if Len(Catalog) > 0 then
 		CatalogConfig = GetFileContent(CatalogPath & OSDirDelimiter & CatalogConfigFileName) & vbCrLf
 		DefaultCatalogConfig = GetFileContent(RootPath & OSDirDelimiter & CatalogConfigFileName) & vbCrLf
 
-		CatalogInfo = GetFileContent(CatalogPath & OSDirDelimiter & CatalogInfoFileName)
+		CatalogInfo = ClearText(GetFileContent(CatalogPath & OSDirDelimiter & CatalogInfoFileName))
 
 		CatalogDefense = GetConfigValue(CatalogConfig, CatalogDefenseKey, GetConfigValue(DefaultCatalogConfig, CatalogDefenseKey, DefaultCatalogDefense))
 		CatalogLanguage = GetConfigValue(CatalogConfig, CatalogLanguageKey, GetConfigValue(DefaultCatalogConfig, CatalogLanguageKey, DefaultCatalogLanguage))
@@ -34,20 +34,35 @@ if Len(Catalog) > 0 then
 		Response.Write "<head>"
 		Response.Write "<meta http-equiv=" & Quote & "Content-Type" & Quote & " content=" & Quote & "text/html; charset=" & LanguageCharset & Quote & "/>"
 		if Len(CatalogStyle) > 0 then
-			Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & WebDirDelimiter & "catalog.css" & Quote & "/>"
+			Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & ".css" & Quote & "/>"
 		end if
 		Response.Write "<link rel=" & Quote & "icon" & Quote & " type=" & Quote & "image/png" & Quote & " href=" & Quote & "favicon.png" & Quote & "/>"
 		Response.Write "<title>" & CatalogTitle & "</title>"
 		Response.Write "</head>"
 		Response.Write "<body>"
-		Response.Write "<center>"
-		Response.Write "<div id=" & Quote & "title" & Quote & "><h1>" & CatalogTitle & "</h1></div>"
-		Response.Write "<div id=" & Quote & "content" & Quote & ">"
-		Response.Write ClearText(CatalogInfo)
+		Response.Write "<table width=" & Quote & "100%" & Quote & " height=" & Quote & "100%" & Quote & ">"
+		Response.Write "<tbody>"
+		Response.Write "<tr valign=" & Quote & "center" & Quote & ">"
+		Response.Write "<td align=" & Quote & "center" & Quote & ">"
+		Response.Write "<table align=" & Quote & "center" & Quote & ">"
+		Response.Write "<tbody>"
+		Response.Write "<tr><td><br></tr></td>"
 
+		' Header
+		Response.Write "<tr><td align=" & Quote & "center" & Quote & "><h1>" & CatalogTitle & "</h1></td></tr>"
+		Response.Write "<tr><td><br></tr></td>"
+
+		' Info
+		if Len(CatalogInfo) > 0 then
+			Response.Write "<tr><td>" & CatalogInfo & "</tr></td>"
+			Response.Write "<tr><td><br></tr></td>"
+		end if
+
+		' Albums
 		if not CatalogDefense then
-			Response.Write "<hr>"
-			Response.Write "<table align=" & Quote & "center" & Quote & ">"
+			Response.Write "<tr><td><hr></tr></td>"
+			Response.Write "<tr><td>"
+			Response.Write "<table align=" & Quote & "center" & Quote & "cellpadding=" & Quote & "5" & Quote & ">"
 			Response.Write "<tbody>"
 
 			' Looking for albums
@@ -99,48 +114,41 @@ if Len(Catalog) > 0 then
 
 			Response.Write "</tbody>"
 			Response.Write "</table>"
-			Response.Write "<hr>"
-		else
-			Response.Write "<br>"
+			Response.Write "</tr></td>"
+			Response.Write "<tr><td><hr></tr></td>"
+			Response.Write "<tr><td><br></tr></td>"
 		end if
 
-		Response.Write CatalogOutroText
-		Response.Write "</div>"
-
-		' Copyright
-		CalalogYear = DatePart("yyyy", FileSystem.GetFolder(CatalogPath).DateCreated)
-		CurrentYear = DatePart("yyyy", Now)
-
-		Response.Write "<div id=" & Quote & "copyright" & Quote & ">"
+		' Footer
+		Response.Write "<tr><td align=" & Quote & "center" & Quote & ">"
 		Response.Write Copyright & " "
 		if CalalogYear < CurrentYear then
 			Response.Write CalalogYear & "-" & CurrentYear
 		else
 			Response.Write CurrentYear
 		end if
-
-		' Author
 		Response.Write " "
 		if Len(CatalogAuthorSite) > 0 then
 			Response.Write "<a href=" & Quote & CatalogAuthorSite & Quote & ">" & CatalogAuthor & "</a>"
 		else
 			Response.Write CatalogAuthor
 		end if
-
-		' Author e-mail
 		if Len(CatalogAuthorEmail) > 0 then
-			Response.Write ", " & LanguageEMail & ": " & "<a href=" & Quote & "mailto:" & CatalogAuthorEmail & Quote & ">" & CatalogAuthorEmail & "</a>"
+			Response.Write " " & LanguageEMail & ": " & "<a href=" & Quote & "mailto:" & CatalogAuthorEmail & Quote & ">" & CatalogAuthorEmail & "</a>"
 		end if
-
-		' Author phone
 		if Len(CatalogAuthorPhone) > 0 then
-			Response.Write ", " & LanguageTelephone & ": " & CatalogAuthorPhone
+			Response.Write " " & LanguageTelephone & ": " & CatalogAuthorPhone
 		end if
-
-		Response.Write "</div>"
+		Response.Write "</tr></td>"
+		Response.Write "<tr><td><br></tr></td>"
 
 		' End of page
-		Response.Write "</center>"
+		Response.Write "</tbody>"
+		Response.Write "</table>"
+		Response.Write "</td>"
+		Response.Write "</tr>"
+		Response.Write "</tbody>"
+		Response.Write "</table>"
 		Response.Write "</body>"
 		Response.Write "</html>"
 	end if

@@ -2,7 +2,7 @@
 <!-- #include file="common.inc" -->
 <!-- #include file="imaging.inc" -->
 <%
-' Looking at URL params
+' Looking for URL params
 Catalog = Request.QueryString("catalog")
 Album = Request.QueryString("album")
 ImageFileName = Request.QueryString("name")
@@ -41,7 +41,7 @@ if Len(Catalog) > 0 and Len(Album) > 0 and Len(ImageFileName) > 0 then
 		Response.Write "<head>"
 		Response.Write "<meta http-equiv=" & Quote & "Content-Type" & Quote & " content=" & Quote & "text/html; charset=" & LanguageCharset & Quote & "/>"
 		if Len(CatalogStyle) > 0 then
-			Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & WebDirDelimiter & "image.css" & Quote & "/>"
+			Response.Write "<link rel=" & Quote & "stylesheet" & Quote & " type=" & Quote & "text/css" & Quote & " href=" & Quote & StyleDir & WebDirDelimiter & CatalogStyle & ".css" & Quote & "/>"
 		end if
 		Response.Write "<link rel=" & Quote & "icon" & Quote & " type=" & Quote & "image/png" & Quote & " href=" & Quote & "favicon.png" & Quote & "/>"
 		Response.Write "<title>" & ImageFileName & "</title>"
@@ -53,6 +53,7 @@ if Len(Catalog) > 0 and Len(Album) > 0 and Len(ImageFileName) > 0 then
 		Response.Write "<td align=" & Quote & "center" & Quote & ">"
 		Response.Write "<table align=" & Quote & "center" & Quote & ">"
 		Response.Write "<tbody>"
+		Response.Write "<tr><td colspan=" & Quote & "3" & Quote & "><br></td></tr>"
 
 		' Looking for images
 		set FileList = FileSystem.GetFolder(AlbumPath).Files
@@ -134,6 +135,7 @@ if Len(Catalog) > 0 and Len(Album) > 0 and Len(ImageFileName) > 0 then
 			end if
 			Response.Write "</td>"
 			Response.Write "</tr>"
+			Response.Write "<tr><td colspan=" & Quote & "3" & Quote & "><br></td></tr>"
 		end if
 
 		' End of page

@@ -69,6 +69,8 @@ LanguageNext = "Next"
 LanguageNextTitle = "Next photo"
 LanguageEMail = "e-mail"
 LanguageTelephone = "tel."
+LanguagePrivateText = "Provide album name for access"
+LanguagePrivateAction = "Proceed"
 
 StyleDir = "style"
 
@@ -94,6 +96,8 @@ sub LoadLanguage(byval Language)
 		LanguageNextTitle = GetConfigValue(LanguageConfig, "next_title", LanguageNextTitle)
 		LanguageEMail = GetConfigValue(LanguageConfig, "e_mail", LanguageEMail)
 		LanguageTelephone = GetConfigValue(LanguageConfig, "telephone", LanguageTelephone)
+		LanguagePrivateText = GetConfigValue(LanguageConfig, "private_text", LanguagePrivateText)
+		LanguagePrivateAction = GetConfigValue(LanguageConfig, "private_action", LanguagePrivateAction)
 	end if
 end sub
 
